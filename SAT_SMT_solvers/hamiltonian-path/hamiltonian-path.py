@@ -1,3 +1,6 @@
+# Francisco José Sánchez de León Acevedo
+# Assignment 1: Hamiltonian paths
+
 # This file generates an SMT-LIB2 script for the hamiltonian path assignment1 problem
 
 from z3 import *
