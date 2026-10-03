@@ -44,7 +44,6 @@ def has_hamiltonian_path(graph):
     solver = Solver()
 
     # Constraint 1:
-    #
     # Every vertex must appear in the sequence.
     #
     # For every vertex v:
@@ -57,7 +56,6 @@ def has_hamiltonian_path(graph):
         )
 
     # Constraint 2:
-    #
     # Every vertex must NOT appear more than once in the sequence.
     #
     # For every vertex v and two different positions within 1 to n:
@@ -76,7 +74,6 @@ def has_hamiltonian_path(graph):
                     ))
 
     # Constraint 3:
-    #
     # Every position in the sequence must contain a vertex.
     #
     # For every position pos:
@@ -89,7 +86,6 @@ def has_hamiltonian_path(graph):
         )
 
     # Constraint 4:
-    #
     # Two vertices that are NOT adjacent in the graph cannot
     # occur in consecutive positions in the sequence.
     #
@@ -123,7 +119,7 @@ def has_hamiltonian_path(graph):
         # If it is satisfiable, we get the model
         model = solver.model()
         path = []
-        # Find which vertex occurs at each position.
+        # Find which vertex occurs at each position to fill the path python list
         for pos in range(1, n+1):
             for v in vertices:
                 if is_true(model[prop_vars[v][pos - 1]]):
@@ -139,17 +135,7 @@ def has_hamiltonian_path(graph):
 # 1 -- 3 _
 # |    |   5
 # 2 -- 4 -
-g = Graph(
-    range(1, 6),
-    [
-        (1, 2),
-        (1, 3),
-        (2, 4),
-        (3, 4),
-        (3, 5),
-        (4, 5)
-    ]
-)
+g = Graph(range(1, 6),[(1, 2), (1, 3), (2, 4), (3, 4), (3, 5), (4, 5)])
 path = has_hamiltonian_path(g)
 
 if path is not None:
