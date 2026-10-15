@@ -17,6 +17,7 @@
         (>= (len v) 1)
         (= i 1)
         (= m 0))
+      ; Left hand side (before loop) implies the invariant
       (and
         (<= 0 i)
         (<= i (len v))
@@ -35,6 +36,7 @@
   (not
     (=>
       (and
+        ; invariant
         (<= 0 i)
         (<= i (len v))
         (<= 0 m)
@@ -43,15 +45,16 @@
           (=>
             (and (<= 0 j) (< j i))
             (>= (select v m) (select v j))))
+        ; b (while condition)
         (< i (len v)))
       (and
-        ; Both array accesses are within bounds.
+        ; Both array accesses are within bounds
         (<= 0 i)
         (< i (len v))
         (<= 0 m)
         (< m (len v))
 
-        ; Then branch: m := i; i := i + 1
+        ; if first branch: m = i and i = i + 1
         (=>
           (> (select v i) (select v m))
           (and
@@ -64,7 +67,7 @@
                 (and (<= 0 j) (< j (+ i 1)))
                 (>= (select v i) (select v j))))))
 
-        ; Else branch: skip; i := i + 1
+        ; Else branch: skip and i := i + 1
         (=>
           (<= (select v i) (select v m))
           (and
@@ -85,6 +88,7 @@
   (not
     (=>
       (and
+        ; Invariant
         (<= 0 i)
         (<= i (len v))
         (<= 0 m)
@@ -93,8 +97,10 @@
           (=>
             (and (<= 0 j) (< j i))
             (>= (select v m) (select v j))))
+        ; Negated b (while condition) equal to (>= i (len v))
         (not (< i (len v))))
       (and
+        ; Postcondition 
         (<= 0 m)
         (< m (len v))
         (forall ((j Int))
@@ -110,6 +116,7 @@
   (not
     (=>
       (and
+        ; Invariant
         (<= 0 i)
         (<= i (len v))
         (<= 0 m)
@@ -118,6 +125,7 @@
           (=>
             (and (<= 0 j) (< j i))
             (>= (select v m) (select v j)))))
+      ; Implies that the termination measure is, at the end, greater or equal to 0
       (>= (- (len v) i) 0))))
 (check-sat)
 (pop)
@@ -128,6 +136,7 @@
   (not
     (=>
       (and
+        ; Invariant 
         (<= 0 i)
         (<= i (len v))
         (<= 0 m)
@@ -136,8 +145,11 @@
           (=>
             (and (<= 0 j) (< j i))
             (>= (select v m) (select v j))))
+        ; b or while condition
         (< i (len v))
+        ; Termination measure after the iteration equals k
         (= (- (len v) i) k))
+      ; K decreases compared to last iteration
       (< (- (len v) (+ i 1)) k))))
 (check-sat)
 (pop)
